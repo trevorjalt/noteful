@@ -6,11 +6,27 @@ import Notelist from './Note-list'
 import './App.css';
 
 function App() {
+  
+  
+  
   return (
     <div className="App">
       <Header/>
-      <Sidebar/>
-      <Notelist/>
+      <main>
+      <Route
+          exact path='/'
+          component={Sidebar}
+         />
+      <Route 
+          exact path='/'
+          component={Notelist}      
+      /> 
+      <Route
+        path= '/folder/:folderId'
+        componet={Sidebar}
+      />
+          
+      </main>
     </div>
   );
 }

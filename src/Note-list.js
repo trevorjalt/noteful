@@ -1,6 +1,5 @@
 import React from 'react';
 import NoteItems from './Note-items';
-import noteItems from './Note-items';
 
 
 export default class noteList extends React.Component{
@@ -10,7 +9,7 @@ export default class noteList extends React.Component{
             <div>
                 <ul>
 
-                   <noteItems/>
+                   <NoteItems/>
 
                 </ul>
 
