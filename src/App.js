@@ -19,7 +19,7 @@ class App extends React.Component {
           folders: STORE.folders,
           notes: STORE.notes
         })
-      }, 900)
+      }, 300)
     }
 
 
@@ -40,7 +40,13 @@ class App extends React.Component {
           />
       <Route 
           exact path='/'
-          component={Notelist}      
+          render={ 
+            (routeprops) => <Notelist 
+              {...routeprops}
+              foldersAre={this.state.folders}
+              notesAre={this.state.notes}
+            />
+          }     
       /> 
       <Route
         exact path= '/folder/:folderId'
@@ -52,7 +58,18 @@ class App extends React.Component {
           />
         }
       />
-          
+      <Route 
+        exact path ='/note/:noteId'
+        render={ 
+          (routeprops) => <Notelist 
+            {...routeprops}
+            foldersAre={this.state.folders}
+            notesAre={this.state.notes}
+          />
+        }
+      />
+
+
       </main>
     </div>
   );

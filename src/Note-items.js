@@ -1,12 +1,18 @@
 import React from 'react';
-import STORE from './STORE';
+import { Link } from 'react-router-dom';
 
 export default class noteItems extends React.Component{
 
     render(){
-        const noteList= STORE.notes.map(note=> {
+          
+
+        
+          //console.log(findNote)
+
+        
+        const noteList= this.props.notesAre.map(note=> {
             return <li key={note.id}>
-                <h3>{note.name} </h3>
+                <Link to={`/note/${note.id}`}><h3>{note.name} </h3></Link>
                 <div>
                 <p>{note.modified}</p>
 
