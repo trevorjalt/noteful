@@ -4,7 +4,7 @@ import STORE from './STORE';
 export default class noteItems extends React.Component{
 
     render(
-        noteList= STORE.notes.map(note=> {
+        const noteList= STORE.notes.map(note=> {
             return <li key={note.id}>{note.name}> </li>
         })
 
@@ -13,5 +13,6 @@ export default class noteItems extends React.Component{
                 {noteList}
             </>
         )
+    )
     
 }
