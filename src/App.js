@@ -3,32 +3,60 @@ import { Route } from 'react-router-dom';
 import Header from './Header'
 import Sidebar from './Side-bar'
 import Notelist from './Note-list'
+import STORE from './STORE'
 import './App.css';
+import noteList from './Note-list';
 
-function App() {
+class App extends React.Component {
+    state={
+      folders:[],
+      notes:[]
+    }
   
-  
-  
+    componentDidMount(){
+      setTimeout(()=> {
+        this.setState({
+          folders: STORE.folders,
+          notes: STORE.notes
+        })
+      }, 900)
+    }
+
+
+  render(){
   return (
     <div className="App">
       <Header/>
       <main>
       <Route
           exact path='/'
-          component={Sidebar}
-         />
+          render={ 
+            (routeprops) => <Sidebar 
+              {...routeprops}
+              foldersAre={this.state.folders}
+              notesAre={this.state.notes}
+            />
+          }
+          />
       <Route 
           exact path='/'
           component={Notelist}      
       /> 
       <Route
-        path= '/folder/:folderId'
-        componet={Sidebar}
+        exact path= '/folder/:folderId'
+        render={ 
+          (routeprops) => <Sidebar 
+            {...routeprops}
+            foldersAre={this.state.folders}
+            notesAre={this.state.notes}
+          />
+        }
       />
           
       </main>
     </div>
   );
+  }
 }
 
 export default App;

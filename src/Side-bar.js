@@ -1,17 +1,18 @@
 import React from 'react';
-import STORE from './STORE'
 
-export default class sideBar extends React.Component{
+
+export default class SideBar extends React.Component{
 
     render(){
-
-        let finBar = STORE.folders.find(f => {
+        console.log(this.props.match.params)
+        let findBar = this.props.foldersAre.find(f => {
           return  f.id === this.props.match.params.folderId
-        })
+        }) || {}
+        console.log(findBar)
 
 
-      let theBar = STORE.folders.map(item => {
-          return <a href={`/folder/${item.id}`}><li key={item.id}>{item.name}</li></a>
+      let theBar = this.props.foldersAre.map(item => {
+          return <li key={item.id}><a href={`/folder/${item.id}`}>{item.name}</a></li>
       })
       
     
@@ -23,6 +24,7 @@ export default class sideBar extends React.Component{
                     <ul>
                     {theBar}
                     </ul>
+        <div>{findBar.name}</div>
                 </div>
             
         )
