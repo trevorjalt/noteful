@@ -14,30 +14,31 @@ export default class NoteListMain extends React.Component {
     
     return (
       <NotefulContext.Consumer>
+        
 
-      <section className='NoteListMain'>
-        <ul>
-          {this.context.notes.map(note =>
-            <li key={note.id}>
-              <Note
-                
-              />
-            </li>
-          )}
-        </ul>
-        <div className='NoteListMain__button-container'>
-          <CircleButton
-            tag={Link}
-            to='/add-note'
-            type='button'
-            className='NoteListMain__add-note-button'
-          >
-            <FontAwesomeIcon icon='plus' />
-            <br />
-            Note
-          </CircleButton>
-        </div>
-      </section>
+        <section className='NoteListMain'>
+          <ul>
+            {this.context.notes.map(note =>
+              <li key={note.id}>
+                <Note
+                  
+                />
+              </li>
+            )}
+          </ul>
+          <div className='NoteListMain__button-container'>
+            <CircleButton
+              tag={Link}
+              to='/add-note'
+              type='button'
+              className='NoteListMain__add-note-button'
+            >
+              <FontAwesomeIcon icon='plus' />
+              <br />
+              Note
+            </CircleButton>
+          </div>
+        </section>
       </NotefulContext.Consumer>
     )
   }
