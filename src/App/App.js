@@ -5,8 +5,6 @@ import NoteListNav from '../NoteListNav/NoteListNav';
 import NotePageNav from '../NotePageNav/NotePageNav';
 import NoteListMain from '../NoteListMain/NoteListMain';
 import NotePageMain from '../NotePageMain/NotePageMain';
-import dummyStore from '../dummy-store';
-import {getNotesForFolder, findNote, findFolder} from '../notes-helpers';
 import NotefulContext from './NotefulContext'
 import './App.css';
 
@@ -17,9 +15,27 @@ class App extends Component {
     };
 
     componentDidMount() {
-        // fake date loading from API call
-        setTimeout(() => this.setState(dummyStore), 600);
+       let baseUrl = `http://localhost:9090/db`
+        
+        fetch(baseUrl)
+        .then(res => res.json())
+        .then (data => {
+            this.setState({
+                notes: data.notes,
+                folders: data.folders
+            })
+        }
+            )
+
+        
     }
+
+    handleDeleteNote = noteId => {
+        this.setState({
+            notes: this.state.notes.filter(note => note.id !==noteId)
+        })
+    }
+
 
     renderNavRoutes() {
         const {notes, folders} = this.state;
@@ -31,24 +47,13 @@ class App extends Component {
                         key={path}
                         path={path}
                         component={NoteListNav}
-                        // render={routeProps => (
-                        //     <NoteListNav
-                        //         folders={folders}
-                        //         notes={notes}
-                        //         {...routeProps}
-                        //     />
-                        // )}
+                 
                     />
                 ))}
                 <Route
                     path="/note/:noteId"
                     component={NotePageNav}
-                    // render={routeProps => {
-                    //     const {noteId} = routeProps.match.params;
-                    //     const note = findNote(notes, noteId) || {};
-                    //     const folder = findFolder(folders, note.folderId);
-                    //     return <NotePageNav {...routeProps} folder={folder} />;
-                    // }}
+            
                 />
                 <Route path="/add-folder" component={NotePageNav} />
                 <Route path="/add-note" component={NotePageNav} />
@@ -57,7 +62,7 @@ class App extends Component {
     }
 
     renderMainRoutes() {
-        const {notes, folders} = this.state;
+        
         return (
             <>
                 {['/', '/folder/:folderId'].map(path => (
@@ -66,29 +71,13 @@ class App extends Component {
                         key={path}
                         path={path}
                         component={NoteListMain}
-                        // render={routeProps => {
-                        //     const {folderId} = routeProps.match.params;
-                        //     const notesForFolder = getNotesForFolder(
-                        //         notes,
-                        //         folderId
-                        //     );
-                        //     return (
-                        //         <NoteListMain
-                        //             {...routeProps}
-                        //             notes={notesForFolder}
-                        //         />
-                        //     );
-                        // }}
+             
                     />
                 ))}
                 <Route
                     exact path="/note/:noteId"
                     component={NotePageMain}
-                    // render={routeProps => {
-                    //     const {noteId} = routeProps.match.params;
-                    //     const note = findNote(notes, noteId);
-                    //     return <NotePageMain {...routeProps} note={note} />;
-                    // }}
+                 
                 />
             </>
         );
@@ -100,8 +89,7 @@ class App extends Component {
                 value={{
                     notes: this.state.notes,
                     folders: this.state.folders,
-                    // note = findNote(notes, noteId) || {},
-                    // folder = findFolder(folders, note.folderId),
+                    deleteNote: this.handleDeleteNote
 
                 }}>
             <div className="App">

@@ -9,13 +9,31 @@ import {getNotesForFolder} from '../notes-helpers'
 
 
 export default class NoteListMain extends React.Component {
+  
+  static defaultProps ={
+    match: {
+      params: {}
+    }
+  }
+  
   static contextType = NotefulContext
+  
+  handleDeleteNote = noteId => {
+    console.log('hi')
+    this.props.history.push('/')
+    
+  }
 
   render () {
+    console.log(this.handleDeleteNote)
+    console.log("NoteListMain.props", this.props)
+
     const {notes} = this.context
     const folderId = this.props.match.params.folderId
     const notesForFolder = getNotesForFolder(notes, folderId)
     
+
+
     return (
       <section className='NoteListMain'>
         <ul>
@@ -25,6 +43,7 @@ export default class NoteListMain extends React.Component {
                 id={note.id}
                 name={note.name}
                 modified={note.modified}
+                onDeleteNote={this.handleDeleteNote}
               />
             </li>
           )}

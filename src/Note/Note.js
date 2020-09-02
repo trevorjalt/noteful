@@ -3,11 +3,38 @@ import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './Note.css'
-// import NotefulContext from '../App/NotefulContext'
+import NotefulContext from '../App/NotefulContext'
 // import {findNote} from '../notes-helpers'
 
 export default class Note extends React.Component {
-  // static contextType = NotefulContext
+    static defaultProps={
+      onDeleteNote: () => {} 
+    }
+
+    static contextType = NotefulContext
+
+     
+   handleClickDelete = (e) => {
+    e.preventDefault()
+    const noteId= this.props.id
+    let baseUrl = `http://localhost:9090/notes/${this.props.id}`
+
+    fetch (baseUrl,  {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json'
+      },
+    })
+    .then(res => res.json())
+    .then(() =>{
+      console.log(this.props)
+      this.context.deleteNote(noteId)
+      this.props.onDeleteNote(noteId)
+      // this.props
+    })
+  }
+
+
 
   render () {
     // console.log(this.props)
@@ -15,6 +42,9 @@ export default class Note extends React.Component {
     // const {notes} = this.context
     // const noteId = this.props.match.params.noteId
     // const note = findNote(notes, noteId) || {}
+    //console.log(this.props.id)
+ 
+
 
     return (
       <div className='Note'>
@@ -23,7 +53,11 @@ export default class Note extends React.Component {
             {this.props.name}
           </Link>
         </h2>
-        <button className='Note__delete' type='button'>
+        <button
+         className='Note__delete' 
+         type='button'
+         onClick={this.handleClickDelete}
+         >
           <FontAwesomeIcon icon='trash-alt' />
           {' '}
           remove
