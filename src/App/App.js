@@ -25,12 +25,12 @@ class App extends Component {
         const {notes, folders} = this.state;
         return (
             <>
-                
                 {['/', '/folder/:folderId'].map(path => (
                     <Route
                         exact
                         key={path}
                         path={path}
+                        // component={NoteListNav}
                         render={routeProps => (
                             <NoteListNav
                                 folders={folders}
@@ -42,6 +42,7 @@ class App extends Component {
                 ))}
                 <Route
                     path="/note/:noteId"
+                    // component={NotePageNav}
                     render={routeProps => {
                         const {noteId} = routeProps.match.params;
                         const note = findNote(notes, noteId) || {};
@@ -51,65 +52,58 @@ class App extends Component {
                 />
                 <Route path="/add-folder" component={NotePageNav} />
                 <Route path="/add-note" component={NotePageNav} />
-                
             </>
         );
     }
 
     renderMainRoutes() {
         const {notes, folders} = this.state;
-        const contextValue = {
-        //     findFolder: (folders=[], folderId) =>
-        //     folders.find(folder => folder.id === folderId),
-          
-        //    findNote: (notes=[], noteId) =>
-        //     notes.find(note => note.id === noteId),
-          
-        //   getNotesForFolder: (notes=[], folderId) => (
-        //     (!folderId)
-        //       ? notes
-        //       : notes.filter(note => note.folderId === folderId)
-        //   ),
-          
-        //   countNotesForFolder: (notes=[], folderId) =>
-        //     notes.filter(note => note.folderId === folderId).length
-               notes: this.state.notes,
-               folders: this.state.folders 
-
-
-
-          }
-        
-        
-        
         return (
             <>
-                <NotefulContext.Provider value ={contextValue}>
                 {['/', '/folder/:folderId'].map(path => (
                     <Route
                         exact
                         key={path}
                         path={path}
-                        component={NoteListMain}
+                        // component={NoteListMain}
+                        render={routeProps => {
+                            const {folderId} = routeProps.match.params;
+                            const notesForFolder = getNotesForFolder(
+                                notes,
+                                folderId
+                            );
+                            return (
+                                <NoteListMain
+                                    {...routeProps}
+                                    notes={notesForFolder}
+                                />
+                            );
+                        }}
                     />
                 ))}
                 <Route
                     path="/note/:noteId"
+                    // component={NotePageMain}
                     render={routeProps => {
                         const {noteId} = routeProps.match.params;
                         const note = findNote(notes, noteId);
                         return <NotePageMain {...routeProps} note={note} />;
                     }}
                 />
-                </NotefulContext.Provider>
             </>
         );
     }
 
     render() {
-      
-      console.log(this.state)
         return (
+            <NotefulContext.Provider 
+                value={{
+                    notes: this.state.notes,
+                    folders: this.state.folders,
+                    // note = findNote(notes, noteId) || {},
+                    // folder = findFolder(folders, note.folderId),
+
+                }}>
             <div className="App">
                 <nav className="App__nav">{this.renderNavRoutes()}</nav>
                 <header className="App__header">
@@ -120,8 +114,10 @@ class App extends Component {
                 </header>
                 <main className="App__main">{this.renderMainRoutes()}</main>
             </div>
+            </NotefulContext.Provider>
         );
     }
 }
 
 export default App;
+
