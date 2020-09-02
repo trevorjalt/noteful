@@ -7,7 +7,6 @@ import NoteListMain from '../NoteListMain/NoteListMain';
 import NotePageMain from '../NotePageMain/NotePageMain';
 import dummyStore from '../dummy-store';
 import {getNotesForFolder, findNote, findFolder} from '../notes-helpers';
-import NotefulContext from './NotefulContext'
 import './App.css';
 
 class App extends Component {
@@ -25,7 +24,6 @@ class App extends Component {
         const {notes, folders} = this.state;
         return (
             <>
-                
                 {['/', '/folder/:folderId'].map(path => (
                     <Route
                         exact
@@ -51,46 +49,32 @@ class App extends Component {
                 />
                 <Route path="/add-folder" component={NotePageNav} />
                 <Route path="/add-note" component={NotePageNav} />
-                
             </>
         );
     }
 
     renderMainRoutes() {
         const {notes, folders} = this.state;
-        const contextValue = {
-        //     findFolder: (folders=[], folderId) =>
-        //     folders.find(folder => folder.id === folderId),
-          
-        //    findNote: (notes=[], noteId) =>
-        //     notes.find(note => note.id === noteId),
-          
-        //   getNotesForFolder: (notes=[], folderId) => (
-        //     (!folderId)
-        //       ? notes
-        //       : notes.filter(note => note.folderId === folderId)
-        //   ),
-          
-        //   countNotesForFolder: (notes=[], folderId) =>
-        //     notes.filter(note => note.folderId === folderId).length
-               notes: this.state.notes,
-               folders: this.state.folders 
-
-
-
-          }
-        
-        
-        
         return (
             <>
-                <NotefulContext.Provider value ={contextValue}>
                 {['/', '/folder/:folderId'].map(path => (
                     <Route
                         exact
                         key={path}
                         path={path}
-                        component={NoteListMain}
+                        render={routeProps => {
+                            const {folderId} = routeProps.match.params;
+                            const notesForFolder = getNotesForFolder(
+                                notes,
+                                folderId
+                            );
+                            return (
+                                <NoteListMain
+                                    {...routeProps}
+                                    notes={notesForFolder}
+                                />
+                            );
+                        }}
                     />
                 ))}
                 <Route
@@ -101,14 +85,11 @@ class App extends Component {
                         return <NotePageMain {...routeProps} note={note} />;
                     }}
                 />
-                </NotefulContext.Provider>
             </>
         );
     }
 
     render() {
-      
-      console.log(this.state)
         return (
             <div className="App">
                 <nav className="App__nav">{this.renderNavRoutes()}</nav>
@@ -125,3 +106,4 @@ class App extends Component {
 }
 
 export default App;
+© 2020 GitH
