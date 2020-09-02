@@ -5,6 +5,7 @@ import Note from '../Note/Note'
 import CircleButton from '../CircleButton/CircleButton'
 import './NoteListMain.css'
 import NotefulContext from '../App/NotefulContext'
+import {getNotesForFolder} from '../notes-helpers'
 
 
 export default class NoteListMain extends React.Component {
@@ -12,11 +13,13 @@ export default class NoteListMain extends React.Component {
 
   render () {
     const {notes} = this.context
+    const folderId = this.props.match.params.folderId
+    const notesForFolder = getNotesForFolder(notes, folderId)
     
     return (
       <section className='NoteListMain'>
         <ul>
-          {notes.map(note =>
+          {notesForFolder.map(note =>
             <li key={note.id}>
               <Note
                 id={note.id}

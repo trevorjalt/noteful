@@ -8,16 +8,18 @@ export default class NotePageMain extends React.Component {
   
   render () {
     const {notes} = this.context
-    
+    console.log(this.props.match.params.noteId)
+    const note = notes.find(n => n.id === this.props.match.params.noteId) || {} 
+    console.log(this.context)
     return (
       <section className='NotePageMain'>
         <Note
-          id={notes.id}
-          name={notes.name}
-          modified={notes.modified}
+          id={note.id}
+          name={note.name}
+          modified={note.modified}
         />
         <div className='NotePageMain__content'>
-          {notes.content.split(/\n \r|\n/).map((para, i) =>
+          {note.content.split(/\n \r|\n/).map((para, i) =>
             <p key={i}>{para}</p>
           )}
         </div>

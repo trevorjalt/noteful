@@ -3,12 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CircleButton from '../CircleButton/CircleButton'
 import './NotePageNav.css'
 import NotefulContext from '../App/NotefulContext'
+import {findNote, findFolder} from '../notes-helpers'
 
 export default class NotePageNav extends React.Component {
   static contextType = NotefulContext
 
   render () {
-    const {folders} = this.context
+    const {folders, notes} = this.context
+    const noteId = this.props.match.params.noteId
+    const note = findNote(notes, noteId) || {}
+    const folder = findFolder(folders, note.folderId)
 
     return (
       <div className='NotePageNav'>
@@ -22,9 +26,9 @@ export default class NotePageNav extends React.Component {
           <br />
           Back
         </CircleButton>
-        {this.props.folder && (
+        {folder && (
           <h3 className='NotePageNav__folder-name'>
-            {this.props.folder.name}
+            {folder.name}
           </h3>
         )}
       </div>
